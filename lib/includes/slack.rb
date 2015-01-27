@@ -5,11 +5,12 @@ module Includes::Slack
   def init_slack!
     @slack_http = Net::HTTP.new SLACK_URL.host, SLACK_URL.port
     @slack_http.use_ssl = true
-    @slack_http.set_debug_output STDOUT
+    @slack_http.set_debug_output STDOUT if ARGV.include? "--debug"
   end
 
   def post_to_slack(events)
     payload = { "attachments" => build_slack_attachments(events) }
+    return if payload["attachments"].empty?
 
     request = Net::HTTP::Post.new SLACK_URL.request_uri
     request.body = Oj.dump(payload)
