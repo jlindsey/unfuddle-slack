@@ -4,7 +4,12 @@ GEM
     coderay (1.1.0)
     dotenv (1.0.2)
     hiredis (0.5.2)
+    httparty (0.13.3)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    json (1.8.2)
     method_source (0.8.2)
+    multi_xml (0.5.5)
     oj (2.11.2)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -19,6 +24,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   hiredis
+  httparty
   oj
   pry
   redis

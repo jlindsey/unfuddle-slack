@@ -1,4 +1,5 @@
 require "uri"
+require "redis_container"
 
 # Unfuddle API
 class UnfuddleAPI
@@ -8,8 +9,7 @@ class UnfuddleAPI
   include HTTParty
   base_uri "#{UNFUDDLE_URI.scheme}://#{UNFUDDLE_URI.hostname}"
 
-  def initialize(redis)
-    @redis = redis
+  def initialize
     @options = {
       basic_auth: {
         username: ENV["UNFUDDLE_USER"],
@@ -27,11 +27,11 @@ class UnfuddleAPI
     events.select! do |obj|
       (obj["record_type"] == "Ticket" or
          obj["record_type"] == "Comment") and
-        not @redis.sismember Includes::Redis::REDIS_KEY, obj["id"]
+        not RedisContainer.sismember obj["id"]
     end
 
     events.each_with_object({}) do |obj, hash|
-      @redis.sadd Includes::Redis::REDIS_KEY, obj["id"]
+      RedisContainer.sadd obj["id"]
 
       hash[ticket_num_from_event(obj)] ||= []
       hash[ticket_num_from_event(obj)] << obj
@@ -40,6 +40,10 @@ class UnfuddleAPI
 
   def ticket(num)
     self.class.get("/api/v1/projects/#{UNFUDDLE_PROJECT_ID}/tickets/by_number/#{num}", @options)
+  end
+
+  def ticket_url(num)
+    "#{UNFUDDLE_URI.scheme}://#{UNFUDDLE_URI.hostname}/a#/projects/#{ticket(num)['project_id']}/tickets/by_number/#{num}"
   end
 
   def ticket_num_from_event(obj)
