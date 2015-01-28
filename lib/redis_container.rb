@@ -14,7 +14,7 @@ class RedisContainer
 
     def client
       if @redis.nil?
-        @redis = Redis.new url: REDIS_CONN_URL
+        @redis = Redis.new url: REDIS_CONN_URL, driver: :hiredis
         @redis.del REDIS_KEY if ARGV.include? "--debug"
       end
 
