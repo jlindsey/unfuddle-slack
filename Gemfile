@@ -3,9 +3,11 @@ source "https://rubygems.org"
 
 gem "hiredis"
 gem "redis"
-gem "oj"
 gem "httparty"
+gem "oj"
 
-gem "dotenv", group: :development
-gem "pry", group: :development
+group :development do
+  gem "dotenv"
+  gem "pry"
+end
 
