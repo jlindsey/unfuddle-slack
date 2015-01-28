@@ -36,5 +36,5 @@ TODO
 
 License
 -------
-Copyright (c) 2014 Josh Lindsey. See [LICENSE](LICENSE) for details.
+Copyright (c) 2015 Josh Lindsey. See [LICENSE](LICENSE) for details.
 
